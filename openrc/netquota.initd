@@ -1,0 +1,23 @@
+#!/sbin/openrc-run
+# NetQuota daemon, supervised the modern OpenRC way (supervise-daemon keeps
+# the foreground python process alive and restarts it if it dies — no
+# separate PID-file bookkeeping needed).
+
+description="NetQuota Internet quota enforcement"
+supervisor=supervise-daemon
+name="netquota"
+command="/usr/bin/setpriv"
+command_args="--reuid=netquota --regid=netquota --clear-groups --inh-caps=+net_admin --ambient-caps=+net_admin -- /usr/bin/env PYTHONPATH=/usr/local/lib /usr/bin/python3 -m netquota daemon"
+pidfile="/run/netquota.pid"
+
+depend() {
+    need net
+    use firewall
+}
+
+stop_post() {
+    # Mirrors the systemd unit's ExecStopPost: never leave a stale drop
+    # rule behind just because the daemon stopped.
+    nft delete table inet netquota 2>/dev/null
+    return 0
+}

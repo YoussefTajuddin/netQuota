@@ -1,0 +1,28 @@
+# Maintainer: NetQuota Maintainers <noreply@example.invalid>
+#
+# UNTESTED skeleton: has not been run through `makepkg` yet. Update
+# pkgver/url/source once this is published to an actual repository, then
+# run `updpkgsums` before submitting to the AUR.
+pkgname=netquota
+pkgver=0.3.0
+pkgrel=1
+pkgdesc="Internet quota enforcement using nftables (IPv4/IPv6, vnStat stats)"
+arch=('any')
+url="https://github.com/CHANGEME/netquota"
+license=('MIT')
+depends=('python' 'nftables' 'vnstat' 'iproute2' 'util-linux')
+optdepends=('firewalld: coexistence with a firewalld-managed firewall')
+backup=('etc/netquota.conf.example')
+install=netquota.install
+source=("$pkgname-$pkgver.tar.gz::https://github.com/CHANGEME/netquota/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+package() {
+    cd "$srcdir/$pkgname-$pkgver"
+    install -d "$pkgdir/usr/local/lib/netquota"
+    cp -a netquota/. "$pkgdir/usr/local/lib/netquota/"
+    find "$pkgdir/usr/local/lib/netquota" -name '__pycache__' -exec rm -rf {} + || true
+    install -Dm755 packaging/common/netquota-wrapper "$pkgdir/usr/local/bin/netquota"
+    install -Dm644 systemd/netquota.service "$pkgdir/usr/lib/systemd/system/netquota.service"
+    install -Dm644 config/netquota.conf.example "$pkgdir/etc/netquota.conf.example"
+}

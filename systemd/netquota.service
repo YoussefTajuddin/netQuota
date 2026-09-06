@@ -1,0 +1,34 @@
+[Unit]
+Description=NetQuota Internet quota enforcement
+After=NetworkManager.service firewalld.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=PYTHONPATH=/usr/local/lib
+ExecStart=/usr/bin/python3 -m netquota daemon
+# Whatever stops the daemon (netquota off, `systemctl stop`, a crash and
+# restart) always removes the nftables table first, so a stopped service
+# never leaves a stale drop rule sitting on the interface.
+ExecStopPost=-/usr/bin/nft delete table inet netquota
+Restart=on-failure
+RestartSec=2
+
+# Run as an unprivileged, dedicated user. CAP_NET_ADMIN is the one
+# capability nftables needs; everything else root can do is denied.
+User=netquota
+Group=netquota
+AmbientCapabilities=CAP_NET_ADMIN
+CapabilityBoundingSet=CAP_NET_ADMIN
+NoNewPrivileges=true
+
+# Filesystem isolation: no write access anywhere except its own state dir.
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+StateDirectory=netquota
+ReadWritePaths=/var/lib/netquota
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

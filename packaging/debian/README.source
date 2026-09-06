@@ -1,0 +1,7 @@
+This is an unofficial, untested packaging skeleton — it has not been run
+through `dpkg-buildpackage`/`debuild` yet. Please open a PR with build
+results before treating it as release-ready.
+
+Build with (from the repo root, after copying this directory to ./debian):
+  cp -a packaging/debian ./debian
+  dpkg-buildpackage -us -uc -b

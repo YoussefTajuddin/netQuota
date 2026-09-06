@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# The one and only netquota CLI wrapper. install.sh and every packaging
+# format under packaging/ install *this exact file* rather than each
+# embedding their own copy — two divergent copies of this wrapper is
+# exactly the bug that shipped in 0.2.0 (see CHANGELOG.md).
+export PYTHONPATH=/usr/local/lib${PYTHONPATH:+:$PYTHONPATH}
+exec /usr/bin/python3 -m netquota "$@"

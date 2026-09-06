@@ -1,0 +1,6 @@
+netquota (0.3.0-1) unstable; urgency=medium
+
+  * Initial Debian packaging. See CHANGELOG.md in the source tree for
+    the full project history.
+
+ -- NetQuota Maintainers <noreply@example.invalid>  Sun, 06 Sep 2026 17:39:14 +0000

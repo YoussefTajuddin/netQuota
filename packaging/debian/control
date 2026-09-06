@@ -1,0 +1,17 @@
+Source: netquota
+Section: net
+Priority: optional
+Maintainer: NetQuota Maintainers <noreply@example.invalid>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: netquota
+Architecture: all
+Depends: python3 (>= 3.10), nftables, vnstat, iproute2, util-linux, ${misc:Depends}
+Recommends: firewalld
+Description: Internet quota enforcement using nftables
+ NetQuota enforces a combined download+upload Internet quota on one
+ network interface using nftables (IPv4 and IPv6), with vnStat for display
+ statistics. Ships a systemd service; the daemon runs as a dedicated
+ unprivileged user with only CAP_NET_ADMIN.

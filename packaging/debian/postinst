@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+if ! id netquota >/dev/null 2>&1; then
+    adduser --system --no-create-home --shell /usr/sbin/nologin netquota
+fi
+install -d -o netquota -g netquota -m 0750 /var/lib/netquota
+if [ ! -f /etc/netquota.conf ]; then
+    cp /etc/netquota.conf.example /etc/netquota.conf
+fi
+if command -v systemctl >/dev/null 2>&1; then
+    systemctl daemon-reload || true
+fi
+echo "NetQuota installed."
+echo "Next: sudo netquota setup   (pick an interface, quota, and period)"
+echo "Then: sudo systemctl enable --now netquota.service"
+exit 0

@@ -1,0 +1,9 @@
+#!/bin/sh
+# runit supervises foreground processes directly, so this *is* the daemon
+# invocation — no separate enable/pidfile bookkeeping needed. Logging is
+# left to runit's own `log/run` convention (redirect stdout as usual).
+exec 2>&1
+export PYTHONPATH="/usr/local/lib${PYTHONPATH:+:$PYTHONPATH}"
+exec setpriv --reuid=netquota --regid=netquota --clear-groups \
+    --inh-caps=+net_admin --ambient-caps=+net_admin \
+    /usr/bin/python3 -m netquota daemon

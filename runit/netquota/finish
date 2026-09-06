@@ -1,0 +1,7 @@
+#!/bin/sh
+# Runs after `run` exits for any reason (sv down, crash, reboot script).
+# Mirrors the systemd ExecStopPost / OpenRC stop_post hook: always drop the
+# nftables table so the interface never gets stuck blocked by a rule nobody
+# is maintaining anymore.
+nft delete table inet netquota 2>/dev/null
+exit 0

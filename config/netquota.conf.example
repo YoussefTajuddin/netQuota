@@ -1,0 +1,16 @@
+# NetQuota configuration
+# INTERFACE is the interface whose Internet traffic is counted/blocked.
+INTERFACE=
+
+# Decimal bytes: 50 GB = 50,000,000,000 bytes.
+LIMIT_BYTES=50000000000
+PERIOD_DAYS=28
+POLL_SECONDS=1
+STATE_FILE=/var/lib/netquota/state.json
+
+# Traffic to/from these networks is not considered Internet traffic.
+# Adjust these for your LAN if needed.
+LOCAL_IPV4=192.168.0.0/16
+LOCAL_IPV6=fc00::/7
+EXCLUDE_IPV4=169.254.0.0/16
+EXCLUDE_IPV6=fe80::/10

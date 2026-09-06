@@ -1,0 +1,17 @@
+#!/usr/bin/make -f
+%:
+	dh $@
+
+override_dh_auto_build:
+	# Pure Python + shell; nothing to compile.
+
+override_dh_auto_install:
+	install -d debian/netquota/usr/local/lib/netquota
+	cp -a netquota/. debian/netquota/usr/local/lib/netquota/
+	find debian/netquota/usr/local/lib/netquota -name '__pycache__' -exec rm -rf {} + || true
+	install -Dm755 packaging/common/netquota-wrapper debian/netquota/usr/local/bin/netquota
+	install -Dm644 systemd/netquota.service debian/netquota/lib/systemd/system/netquota.service
+	install -Dm644 config/netquota.conf.example debian/netquota/etc/netquota.conf.example
+
+override_dh_auto_test:
+	python3 -m unittest discover -s tests
